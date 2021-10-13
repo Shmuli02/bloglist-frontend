@@ -8,7 +8,9 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
-  const [newBlog, setNewBlog] = useState('')
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
+  const [newBlogUrl, setNewBlogUrl] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -47,7 +49,7 @@ const App = () => {
   }
 
   const addBlog = () => {
-
+    blogService.create({'title':newBlogTitle,'author':newBlogAuthor,'url':newBlogUrl})
   }
 
   const loginForm = () => (
@@ -74,13 +76,21 @@ const App = () => {
     </form>      
   )
 
-  const noteForm = () => (
+  const newBlogForm = () => (
     <form onSubmit={addBlog}>
-    <input
-      value={newBlog}
-      onChange={({ target }) => setNewBlog(target.value)}
-    />
-    <button type="submit">save</button>
+    Title: <input
+      value={newBlogTitle}
+      onChange={({ target }) => setNewBlogTitle(target.value)}
+    /><br></br>
+    Author: <input
+      value={newBlogAuthor}
+      onChange={({ target }) => setNewBlogAuthor(target.value)}
+    /><br></br>
+    Url: <input
+      value={newBlogUrl}
+      onChange={({ target }) => setNewBlogUrl(target.value)}
+    /><br></br>
+    <button type="submit">Create</button>
   </form>  
   )
 const handleLogout = (enevt) => {
@@ -102,7 +112,7 @@ const logout = () => (
       loginForm() :
       <div>
         <p>{user.name} logged in {logout()}</p>
-        {noteForm()}
+        {newBlogForm()}
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
