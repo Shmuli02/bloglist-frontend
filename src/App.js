@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -11,11 +11,9 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
   const [user, setUser] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
+  const newBlogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -41,7 +39,6 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
-      console.log(user)
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       ) 
@@ -56,8 +53,13 @@ const App = () => {
     }
   }
 
-  const handleBlogSubmit = () => {
-    blogService.create({'title':newBlogTitle,'author':newBlogAuthor,'url':newBlogUrl})
+  const handleBlogSubmit = (NewBlogObject) => {
+    newBlogFormRef.current.toggleVisibility()
+    blogService
+      .create(NewBlogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+      })
   }
 
   
@@ -69,8 +71,6 @@ const App = () => {
   const logout = () => (
     <button onClick={handleLogout}>Logout</button>
   )
-  const loginForm = () => {
-  }
 
 
 
@@ -90,15 +90,9 @@ const App = () => {
       :
       <div>
         <p>{user.name} logged in {logout()}</p>
-        <Togglable buttonLabel='create new blog'>
+        <Togglable buttonLabel='create new blog' ref={newBlogFormRef}>
           <BlogForm
-            title={newBlogTitle}
-            author={newBlogAuthor}
-            url={newBlogUrl}
-            handleTitleChange={({ target }) => setNewBlogTitle(target.value)}
-            handleAuthorChange={({ target }) => setNewBlogAuthor(target.value)}
-            handleUrlChange={({ target }) => setNewBlogUrl(target.value)}
-            handleSubmit={handleBlogSubmit}
+            handleBlogSubmit={handleBlogSubmit}
           />
         </Togglable>
       {blogs.map(blog =>
