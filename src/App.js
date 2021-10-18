@@ -15,6 +15,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   // const [loginVisible, setLoginVisible] = useState(false)
   const newBlogFormRef = useRef()
+  blogs.sort(function (a,b) {
+    return b.likes - a.likes
+  })
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -78,9 +81,9 @@ const App = () => {
     newBlogObject.likes += 1
     blogService
       .update(newBlogObject.id,newBlogObject)
-      .then(updatedBlog => {
-        setBlogs(blogs.concat(updatedBlog))
-      })
+      // .then(updatedBlog => {
+      //   setBlogs(blogs.concat(updatedBlog))
+      // })
   }
 
 
