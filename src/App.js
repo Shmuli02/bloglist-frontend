@@ -10,14 +10,15 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  // const [errorMessage, setErrorMessage] = useState(null)
+  const [, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
-  const [loginVisible, setLoginVisible] = useState(false)
+  // const [loginVisible, setLoginVisible] = useState(false)
   const newBlogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     )
   }, [])
 
@@ -63,7 +64,7 @@ const App = () => {
   }
 
 
-  const handleLogout = (event) => {
+  const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
   }
@@ -72,6 +73,15 @@ const App = () => {
     <button onClick={handleLogout}>Logout</button>
   )
 
+  const handleAddLike = (event) => {
+    const newBlogObject = blogs.filter(blog => blog.id === event.target.value)[0]
+    newBlogObject.likes += 1
+    blogService
+      .update(newBlogObject.id,newBlogObject)
+      .then(updatedBlog => {
+        setBlogs(blogs.concat(updatedBlog))
+      })
+  }
 
 
   return (
@@ -96,9 +106,8 @@ const App = () => {
             />
           </Togglable>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleAddLike={handleAddLike} />
           )}
-
         </div>
 
       }
