@@ -13,11 +13,10 @@ const Blog = ({ blog, handleAddLike }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title}
+      {blog.title} {blog.author}
       <Togglable key={blog.id} buttonLabel='view'>
         <p>Url: {blog.url}</p>
         <p>Likes: {blog.likes} <button onClick={handleAddLike} value={blog.id}>Like</button></p>
-        <p>Author: {blog.author}</p>
       </Togglable>
     </div>
   )
