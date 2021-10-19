@@ -25,14 +25,17 @@ const BlogForm = ({
     <div>
       <form onSubmit={createNewBlog}>
     Title: <input
+          id='title'
           value={newBlogTitle}
           onChange={handleTitleChange}
         /><br></br>
     Author: <input
+          id='author'
           value={newBlogAuthor}
           onChange={handleAuthorChange}
         /><br></br>
     Url: <input
+          id='url'
           value={newBlogUrl}
           onChange={handleUrlChange}
         /><br></br>
