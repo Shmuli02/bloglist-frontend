@@ -15,7 +15,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   // const [loginVisible, setLoginVisible] = useState(false)
   const newBlogFormRef = useRef()
-  blogs.sort(function (a,b) {
+  blogs.sort(function (a, b) {
     return b.likes - a.likes
   })
 
@@ -80,10 +80,18 @@ const App = () => {
     const newBlogObject = blogs.filter(blog => blog.id === event.target.value)[0]
     newBlogObject.likes += 1
     blogService
-      .update(newBlogObject.id,newBlogObject)
-      // .then(updatedBlog => {
-      //   setBlogs(blogs.concat(updatedBlog))
-      // })
+      .update(newBlogObject.id, newBlogObject)
+
+    blogService.getAll().then(blogs =>
+      setBlogs(blogs)
+    )
+  }
+
+  const handleBlogDelete = (event) => {
+    blogService.deleteBlog(event.target.value)
+    blogService.getAll().then(blogs =>
+      setBlogs(blogs)
+    )
   }
 
 
@@ -109,7 +117,7 @@ const App = () => {
             />
           </Togglable>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} handleAddLike={handleAddLike} />
+            <Blog key={blog.id} blog={blog} handleAddLike={handleAddLike} handleBlogDelete={handleBlogDelete} />
           )}
         </div>
 
