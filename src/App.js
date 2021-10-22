@@ -82,15 +82,15 @@ const App = () => {
     blogService
       .update(newBlogObject.id, newBlogObject)
 
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+    blogService.getAll().then(blogs2 =>
+      setBlogs(blogs2)
     )
   }
 
   const handleBlogDelete = (event) => {
     blogService.deleteBlog(event.target.value)
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+    blogService.getAll().then(blogs2 =>
+      setBlogs(blogs2)
     )
   }
 
@@ -116,9 +116,17 @@ const App = () => {
               handleBlogSubmit={handleBlogSubmit}
             />
           </Togglable>
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} handleAddLike={handleAddLike} handleBlogDelete={handleBlogDelete} />
-          )}
+          {blogs.length === 0 ?
+            <div>
+              <p>Ei blogeja</p>
+            </div>
+            :
+            <div>
+              {blogs.map(blog =>
+                <Blog key={blog.id} blog={blog} handleAddLike={handleAddLike} handleBlogDelete={handleBlogDelete} />
+              )}
+            </div>
+          }
         </div>
 
       }

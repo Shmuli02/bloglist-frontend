@@ -19,7 +19,9 @@ const BlogForm = ({
       'author':newBlogAuthor,
       'url':newBlogUrl
     })
-
+    setNewBlogTitle('')
+    setNewBlogAuthor('')
+    setNewBlogUrl('')
   }
   return (
     <div>

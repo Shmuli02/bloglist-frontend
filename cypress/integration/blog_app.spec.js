@@ -57,7 +57,41 @@ describe('Blog app ', function() {
       it('user can like a blog', function() {
         cy.contains('view').click()
         cy.contains('Like').click()
-        cy.contains('Likes') //kesken 
+        cy.visit('http://localhost:3000')
+        cy.contains('view').click()
+        cy.contains('Likes: 1') 
+      })
+      it('user can delete a blog', function() {
+        cy.contains('view').click()
+        cy.contains('Delete').click()
+        cy.visit('http://localhost:3000')
+        cy.contains('Ei blogeja')
+      })
+      describe('add secound blog', function() {
+        beforeEach(function() {
+          cy.contains('create new blog').click()
+          cy.get('#title').type('secound blog title')
+          cy.get('#author').type('Matti malli')
+          cy.get('#url').type('www.mooc.fi')
+          cy.contains('Create').click()
+        })
+        it('blogs are sorted by likes', function() {
+          cy.wait(500)
+          cy.get('button').then( buttons => {
+            cy.wrap(buttons[8]).click()
+            cy.wrap(buttons[9]).click()
+
+          })
+          cy.visit('http://localhost:3000')
+          cy.wait(500)
+          // delete last blog
+          cy.get('button').then( buttons => {
+            cy.wrap(buttons[8]).click()
+            cy.wrap(buttons[10]).click()
+          })
+          cy.visit('http://localhost:3000')
+          cy.contains('secound blog title')
+      })  
       })
     })
     
